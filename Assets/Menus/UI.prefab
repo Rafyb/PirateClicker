@@ -2851,7 +2851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00012893589}
+  m_AnchoredPosition: {x: 0, y: 0.000045776367}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1000625269
@@ -3553,7 +3553,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lvl 1
+  m_text: Lvl 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aa017c5f970700942b05fedafb7cc841, type: 2}
   m_sharedMaterial: {fileID: -3959385536779297603, guid: aa017c5f970700942b05fedafb7cc841, type: 2}
@@ -3956,7 +3956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 363934863}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -6148,7 +6148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 919480129}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -6859,7 +6859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 5075727033910313188}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -7790,10 +7790,10 @@ RectTransform:
   m_Father: {fileID: 5075727034663474494}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -321.1255, y: 0}
-  m_SizeDelta: {x: 642.251, y: 0}
+  m_SizeDelta: {x: 642.251, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5075727034055909017
 CanvasRenderer:
@@ -8210,3 +8210,7 @@ MonoBehaviour:
   ShipTab: {fileID: 2080635540}
   CrewTab: {fileID: 5075727033300367293}
   StatsTab: {fileID: 1293358836}
+  Gold: {fileID: 5075727032645291982}
+  PrefabFeedbackText: {fileID: 6746548813710434206, guid: 7ae7520de69483f40973522d4e49d782, type: 3}
+  Red: {r: 0.8490566, g: 0.108134575, b: 0.108134575, a: 1}
+  Golden: {r: 1, g: 0.7058824, b: 0, a: 1}

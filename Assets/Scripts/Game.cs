@@ -20,6 +20,8 @@ public class Game : MonoBehaviour
     private int _enemyLife;
     private bool _battling;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,9 @@ public class Game : MonoBehaviour
     private void KillEnemy()
     {
         _battling = false;
+        
         StartCoroutine(WaitBeforeNewShip());
+        
         LifeBar.GetComponent<CanvasGroup>().DOFade(0, 0.3f).OnComplete(() => { });
         _enemyShip.transform.DOKill();
         _enemyShip.transform.DOMoveY(_enemyShip.transform.position.y-30, 2).OnComplete(() =>
@@ -56,6 +60,9 @@ public class Game : MonoBehaviour
             Destroy(_enemyShip);
         });;
         _enemyShip.transform.DORotate(new Vector3(30,0,20),0.2f);
+        
+        _player.AddGold(50+10*(_player.PlayerLevel-1));
+        UIManager.Instance.Popup("+"+(50+10*(_player.PlayerLevel-1))+"Golds",UIManager.Instance.Golden,EnemyPos.position+new Vector3(-5,0,10));
     }
 
     private void HitShip()
@@ -72,6 +79,7 @@ public class Game : MonoBehaviour
             });
             
             _enemyLife -= _player.PlayerLevel;
+            UIManager.Instance.Popup("-"+_player.PlayerLevel,UIManager.Instance.Red,EnemyPos.position+new Vector3(-5,8,10));
             LifeBar.GetComponent<LifeBar>().UpdateLife(_enemyLife);
             
             if(_enemyLife <= 0) KillEnemy();
