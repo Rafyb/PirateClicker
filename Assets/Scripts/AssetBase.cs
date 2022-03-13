@@ -6,7 +6,8 @@ public class AssetBase : MonoBehaviour
 {
     [Header("Ships")]
     public List<GameObject> Ships;
-    public List<EnemyShip> Enemys;
+    //public List<EnemyShip> Enemys;
+    public int EnemyLife;
 
     [Header("Upgrade")]
     public int[] ShipCost;
@@ -17,8 +18,16 @@ public class AssetBase : MonoBehaviour
     public int[] GunnerCost;
 
     private int _idxEnemys;
-    public EnemyShip GetNextEnemy()
+    public EnemyShip GetNextEnemy(int wave)
     {
-        return Enemys[_idxEnemys];
+        int idx = wave / 5;
+        if (idx >= Ships.Count) idx = Ships.Count-1;
+
+        EnemyShip ship = new EnemyShip();
+        ship.Life = wave * EnemyLife;
+        ship.Prefab = Ships[idx];
+
+        return ship;
     }
+    
 }

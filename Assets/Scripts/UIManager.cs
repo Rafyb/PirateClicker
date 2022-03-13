@@ -37,14 +37,19 @@ public class UIManager : MonoBehaviour
     public TMP_Text CostGunner;
     
     [Header("Page3")]
-    public TMP_Text StatGold;
-    public TMP_Text StatCrewmate;
-    public TMP_Text StatDamagePerSecund;
+    public TMP_Text Stats;
+
 
     
     public static UIManager Instance;
-    
-    
+    private Game _game;
+    private Player _player;
+
+    public void SetInstances(Player p, Game g)
+    {
+        _player = p;
+        _game = g;
+    }
 
     private void Awake()
     {
@@ -60,27 +65,83 @@ public class UIManager : MonoBehaviour
     {
         if (idx == 0) // Ship
         {
+            int lvl = _player.ShipLevel;
+            if (lvl >= _game.Database.Ships.Count) return;
+
+            int cost = _game.Database.ShipCost[lvl];
+            if (cost > _player.Gold) return;
+
+            _player.ShipLevel++;
+            _player.AddGold(-cost);
+            _game.UpgradeShip();
+
+            lvl = _player.ShipLevel;
             
+            LvlShip.text = "Lvl " + lvl;
+            if (lvl >= _game.Database.Ships.Count) CostShip.text = "MAX";
+            else CostShip.text = "Upgrade ("+_game.Database.ShipCost[lvl]+"G)";
         }
         if (idx == 1) // Chests
         {
+            int cost = _player.GetChestMax();
+            if (cost > _player.Gold) return;
+             
+            _player.ChestLevel++;
+            _player.AddGold(-cost);
+            
+            LvlChest.text = "Lvl " + _player.ChestLevel;
+            CostChest.text = "Upgrade ("+_player.GetChestMax()+"G)";
             
         }
         if (idx == 2) // Canons
         {
+            int cost = 50 + (_player.CanonLevel*50);
+            if (cost > _player.Gold) return;
             
+            _player.CanonLevel++;
+            _player.AddGold(-cost);
+            
+            LvlCanons.text = "Lvl " + _player.CanonLevel;
+            CostCanons.text = "Upgrade ("+(50 + (_player.CanonLevel*50))+"G)";
         }
         if (idx == 3) // Captain
         {
+            int cost = (_player.PlayerLevel*50);
+            if (cost > _player.Gold) return;
             
+            _player.PlayerLevel++;
+            _player.AddGold(-cost);
+            
+            LvlCaptain.text = "Lvl " + _player.PlayerLevel;
+            CostCaptain.text = "Upgrade ("+(_player.PlayerLevel*50)+"G)";
+            TxtCaptain.text = "Earn " + (25 + _player.PlayerLevel * 25) + "G per ship\nYour click make " +
+                              _player.PlayerLevel + "DMG";
         }
         if (idx == 4) // Crewmate
         {
+            int cost = 100 + (_player.CrewmateNb*100);
+            if (cost > _player.Gold) return;
+
+            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) return;
             
+            _player.CrewmateNb++;
+            _player.AddGold(-cost);
+            
+            LvlMoussaillon.text = "Nb " + _player.CrewmateNb;
+            CostMoussaillon.text = "Upgrade ("+(100 + (_player.CrewmateNb*100))+"G)";
         }
         if (idx == 5) // Gunner
         {
+            int cost = 150 + (_player.GunnerNb*150);
+            if (cost > _player.Gold) return;
             
+            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) return;
+            
+            _player.GunnerNb++;
+            _player.AddGold(-cost);
+            
+            LvlGunner.text = "Nb " + _player.GunnerNb;
+            CostGunner.text = "Upgrade ("+(150 + (_player.GunnerNb*150))+"G)";
         }
     }
 
@@ -93,7 +154,19 @@ public class UIManager : MonoBehaviour
     {
         HideTabs();
         StatsTab.SetActive(true);
+
+        RefreshStats();
+
     }
+
+    public void RefreshStats()
+    {
+        Stats.text = "Crewmate Number : "+(1+_player.GunnerNb+_player.CrewmateNb)+"/" + (1+2*_player.ShipLevel) +
+                     "\nGold : "+_player.Gold+"/"+_player.GetChestMax() +
+                     "\nCanon DMG : "+_player.GetCanonsHits()+" dmg/s" +
+                     "\nCrewmate DMG : "+(_player.CrewmateNb*_player.PlayerLevel*4)+" dmg/s";
+    }
+    
     public void OnClickCrewTab()
     {
         HideTabs();
@@ -118,12 +191,13 @@ public class UIManager : MonoBehaviour
         go.transform.DOMoveY(go.transform.position.y + 50, 1.5f);
         go.GetComponent<CanvasGroup>().DOFade(0, 1.5f);
         
-        Destroy(go,1.2f);
+        Destroy(go,2f);
 
     }
 
     public void UpdateGold(int gold)
     {
         Gold.text = gold + " Gold";
+        RefreshStats();
     }
 }
