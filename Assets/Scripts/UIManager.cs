@@ -16,7 +16,10 @@ public class UIManager : MonoBehaviour
     [Header("Left UI")]
     public TMP_Text Gold;
     public GameObject PrefabFeedbackText;
+    public CanvasGroup EnoughMoney;
+    public CanvasGroup EnoughSpace;
     public Color Red;
+    public Color Orange;
     public Color Golden;
     
     [Header("Page1")]
@@ -45,6 +48,24 @@ public class UIManager : MonoBehaviour
     private Game _game;
     private Player _player;
 
+    public void NotEnoughMoney()
+    {
+        StartCoroutine(Display(EnoughMoney));
+    }
+    
+    public void NotEnoughSpace()
+    {
+        StartCoroutine(Display(EnoughSpace));
+    }
+
+    IEnumerator Display(CanvasGroup msg)
+    {
+        msg.DOKill();
+        msg.DOFade(1, 0.25f);
+        yield return new WaitForSeconds(0.5f);
+        msg.DOFade(0, 0.25f);
+    }
+
     public void SetInstances(Player p, Game g)
     {
         _player = p;
@@ -61,15 +82,24 @@ public class UIManager : MonoBehaviour
         OnClickShipTab();
     }
 
+    public void StartingGame()
+    {
+        _game.NextEnemy();
+    }
+
     public void OnClickUpgrade(int idx)
     {
         if (idx == 0) // Ship
         {
-            int lvl = _player.ShipLevel;
+            int lvl = _player.ShipLevel-1;
             if (lvl >= _game.Database.Ships.Count) return;
 
             int cost = _game.Database.ShipCost[lvl];
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold)
+            {
+                NotEnoughMoney();
+                return;
+            }
 
             _player.ShipLevel++;
             _player.AddGold(-cost);
@@ -84,7 +114,10 @@ public class UIManager : MonoBehaviour
         if (idx == 1) // Chests
         {
             int cost = _player.GetChestMax();
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold) {
+                NotEnoughMoney();
+                return;
+            }
              
             _player.ChestLevel++;
             _player.AddGold(-cost);
@@ -96,7 +129,10 @@ public class UIManager : MonoBehaviour
         if (idx == 2) // Canons
         {
             int cost = 50 + (_player.CanonLevel*50);
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold) {
+                NotEnoughMoney();
+                return;
+            }
             
             _player.CanonLevel++;
             _player.AddGold(-cost);
@@ -107,7 +143,10 @@ public class UIManager : MonoBehaviour
         if (idx == 3) // Captain
         {
             int cost = (_player.PlayerLevel*50);
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold) {
+                NotEnoughMoney();
+                return;
+            }
             
             _player.PlayerLevel++;
             _player.AddGold(-cost);
@@ -120,9 +159,15 @@ public class UIManager : MonoBehaviour
         if (idx == 4) // Crewmate
         {
             int cost = 100 + (_player.CrewmateNb*100);
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold) {
+                NotEnoughMoney();
+                return;
+            }
 
-            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) return;
+            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) {
+                NotEnoughSpace();
+                return;
+            }
             
             _player.CrewmateNb++;
             _player.AddGold(-cost);
@@ -133,9 +178,15 @@ public class UIManager : MonoBehaviour
         if (idx == 5) // Gunner
         {
             int cost = 150 + (_player.GunnerNb*150);
-            if (cost > _player.Gold) return;
+            if (cost > _player.Gold) {
+                NotEnoughMoney();
+                return;
+            }
             
-            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) return;
+            if (_player.GunnerNb + _player.CrewmateNb >= 2 * _player.ShipLevel) {
+                NotEnoughSpace();
+                return;
+            }
             
             _player.GunnerNb++;
             _player.AddGold(-cost);

@@ -43,7 +43,7 @@ public class Player
         if (WaitQuartSecond >= 0.25f)
         {
             WaitQuartSecond -= 0.25f;
-            if(CrewmateNb > 0) g.IADamage(CrewmateNb*PlayerLevel);
+            if(CrewmateNb > 0) g.IADamage(CrewmateNb*PlayerLevel,UIManager.Instance.Red);
         }
         else WaitQuartSecond += delta;
         
@@ -54,7 +54,7 @@ public class Player
             if (dmg > 0)
             {
                 SoundManager.Instance.PlaySound("CANON");
-                g.IADamage(dmg);
+                g.IADamage(dmg,UIManager.Instance.Orange);
             }
         }
         else WaitOneSecond += delta;

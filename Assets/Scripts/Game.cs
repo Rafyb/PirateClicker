@@ -21,23 +21,21 @@ public class Game : MonoBehaviour
     private bool _battling;
 
     [HideInInspector] public int Wave;
-
-
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        SoundManager.Instance.PlaySound("CANON");
-        
+
         _player = new Player();
         _playerShip = Instantiate(Database.Ships[0], PlayerPos.position, Database.Ships[0].transform.rotation);
         
         UIManager.Instance.SetInstances(_player,this);
         
-        StartCoroutine(WaitBeforeNewShip());
+       
     }
 
-    private void NextEnemy()
+    public void NextEnemy()
     {
         EnemyShip enemy = Database.GetNextEnemy(++Wave);
         _enemyLife = enemy.Life;
@@ -94,13 +92,13 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void IADamage(int dmg)
+    public void IADamage(int dmg,Color c)
     {
         if (!_battling) return;
         
         _enemyLife -= dmg;
         
-        UIManager.Instance.Popup("-"+dmg,UIManager.Instance.Red,EnemyPos.position+new Vector3(-5,8,10));
+        UIManager.Instance.Popup("-"+dmg,c,EnemyPos.position+new Vector3(-5,8,10));
         LifeBar.GetComponent<LifeBar>().UpdateLife(_enemyLife);
         
         if(_enemyLife <= 0) KillEnemy();

@@ -20,7 +20,7 @@ public class AssetBase : MonoBehaviour
     private int _idxEnemys;
     public EnemyShip GetNextEnemy(int wave)
     {
-        int idx = wave / 5;
+        int idx = wave / 8;
         if (idx >= Ships.Count) idx = Ships.Count-1;
 
         EnemyShip ship = new EnemyShip();
